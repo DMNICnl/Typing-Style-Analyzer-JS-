@@ -36,6 +36,7 @@ h1{
   border: none;
   background-color: #00033d;
   color: aliceblue;
+  cursor: pointer;
 }
 .stats{
     position: absolute;
