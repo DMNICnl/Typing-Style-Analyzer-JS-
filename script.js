@@ -41,9 +41,6 @@ startBtn.addEventListener("click", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-  allStats.forEach((stat) => {
-    stat.textContent = "";
-  });
   endTime = Date.now();
   sessionActive = false;
   startTime = null;
