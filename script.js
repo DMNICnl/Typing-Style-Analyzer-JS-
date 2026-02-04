@@ -5,7 +5,6 @@ let backspaceCount = 0;
 let keystrokes = [];
 
 let typingArea = document.querySelector("#typingArea");
-  let typeValue = typingArea.value;
 
 let allStats = document.querySelectorAll(".stats");
 let statWpm = document.querySelector("#wpm");
@@ -15,7 +14,7 @@ let backspaces = document.querySelector("#backspaces");
 let pauseAvg = document.querySelector("#pauseAvg");
 
 let targetText = document.querySelector("#targetText");
-let targetTextLength = targetText.value;
+let targetTextLength = targetText.textContent;
 // buttons
 const startBtn = document.querySelector("#startBtn");
 const resetBtn = document.querySelector("#resetBtn");
@@ -24,6 +23,7 @@ typingArea.addEventListener("keydown", function (event) {
   if (sessionActive === false) {
     return;
   } else {
+    updateStats();
     let keyObject = { key: event.key, time: Date.now(), type: event.code };
     console.log(event.key);
     console.log(event.code);
@@ -33,7 +33,6 @@ typingArea.addEventListener("keydown", function (event) {
       backspaces.textContent = `Backspaces: ${backspaceCount}`;
     }
   }
-  updateStats();
 });
 console.log(keystrokes);
 
@@ -60,7 +59,7 @@ resetBtn.addEventListener("click", () => {
 });
 
 function getDurationSeconds() {
-  let duration = Date.now() - startTime;
+  let duration = (Date.now() - startTime) / 1000;
   console.log(duration);
 
   return duration;
@@ -69,27 +68,27 @@ function getDurationSeconds() {
 function calculateWPM(text, seconds) {
   let words = text.trim().split(/\s+/).length;
   let minutes = seconds / 60;
-  let wpm = words / minutes;
-  statWpm.textContent = `WPM: ${Math.floor(wpm)}`;
-  return Math.floor(wpm);
+  let wpm = Math.floor(words / minutes);
+  statWpm.textContent = `WPM: ${wpm}`;
+  return wpm;
 }
 
 function calculateErrors(typedText, targetTextLength) {
   let calcErrors = 0;
-  for (let i = 0; i < keystrokes.length; i++) {
-    const stroke = keystrokes[i];
+  for (let i = 0; i < typedText.length; i++) {
+    const stroke = typedText[i];
     for (let a = 0; a < targetTextLength.length; a++) {
       const element = targetTextLength[a];
       if (stroke !== element) {
         console.log("wrong letter");
       }
-    }
-    if (typedText.length > targetTextLength.length) {
-      calcErrors = typedText.length - targetTextLength.length;
-      errors.textContent = `Error: ${calcErrors}`;
-      return;
+      if (typedText.length > targetTextLength.length) {
+        calcErrors = typedText.length - targetTextLength.length;
+        errors.textContent = `Error: ${calcErrors}`;
+      }
     }
   }
+  return calcErrors;
 }
 
 function calculateAccuracy(errors, typedLength) {
@@ -99,20 +98,22 @@ function calculateAccuracy(errors, typedLength) {
 }
 
 function calculateAveragePause(keystrokes) {
-  pauseAvg = 0;
+  let pauseAvgVal = 0;
   for (let i = 0; i < keystrokes.length; i++) {
     const stroke = keystrokes[i];
     let betwheentime = (stroke.time + stroke.time) / keystrokes.length;
-    pauseAvg += betwheentime;
-    pauseAvg.textContent = `PauseAvg: ${pauseAvg}`;
-    return pauseAvg;
+    pauseAvgVal += betwheentime;
+    pauseAvg.textContent = `PauseAvg: ${pauseAvgVal}`;
   }
+  return pauseAvgVal;
 }
 
 function updateStats() {
+    let typeValue = typingArea.value;
+
   let totalDuration = getDurationSeconds();
   calculateWPM(typeValue, totalDuration);
- let calculatedErrors = calculateErrors(typeValue, targetText);
+  let calculatedErrors = calculateErrors(typeValue, targetTextLength);
   calculateAccuracy(calculatedErrors, typeValue.length);
   calculateAveragePause(keystrokes);
 }
