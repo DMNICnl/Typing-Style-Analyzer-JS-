@@ -56,6 +56,8 @@ resetBtn.addEventListener("click", () => {
   errors.textContent = `Error: 0`;
   backspaces.textContent = `Backspaces: 0`;
   pauseAvg.textContent = `PauseAvg: 0`;
+    typingArea.value = "";
+
 });
 
 function getDurationSeconds() {
@@ -94,7 +96,13 @@ function calculateErrors(typedText, targetTextLength) {
 }
 
 function calculateAccuracy(errors, typedLength) {
-  let calcedAccuracy = Math.floor((1 - errors / typedLength) * 100);
+  let calcedAccuracy = 0;
+  if (typedLength <= 0) {
+    calcedAccuracy = 0;
+    accuracy.textContent = `Accuracy: ${calcedAccuracy}`;
+    return 0;
+  }
+  calcedAccuracy = Math.floor((1 - errors / typedLength) * 100);
   accuracy.textContent = `Accuracy: ${calcedAccuracy}`;
   return calcedAccuracy;
 }
