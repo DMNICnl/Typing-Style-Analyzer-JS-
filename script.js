@@ -14,10 +14,17 @@ let backspaces = document.querySelector("#backspaces");
 let pauseAvg = document.querySelector("#pauseAvg");
 
 let targetText = document.querySelector("#targetText");
-let targetTextLength = targetText.textContent;
+let targetTextLength = targetText.textContent.trim().replace(/\s+/g, " ");
 // buttons
 const startBtn = document.querySelector("#startBtn");
 const resetBtn = document.querySelector("#resetBtn");
+
+typingArea.addEventListener("input", ()=>{
+  if (!sessionActive) {
+    return
+  }
+  updateStats()
+})
 
 typingArea.addEventListener("keydown", function (event) {
   if (sessionActive === false) {
@@ -27,7 +34,6 @@ typingArea.addEventListener("keydown", function (event) {
     console.log(event.key);
     console.log(event.code);
     keystrokes.push(keyObject);
-    updateStats();
     if (keyObject.key === "Backspace") {
       backspaceCount++;
       backspaces.textContent = `Backspaces: ${backspaceCount}`;
@@ -109,6 +115,7 @@ function calculateAccuracy(errors, typedLength) {
 function calculateAveragePause(keystrokes) {
   let pauseAvgVal = 0;
   if (keystrokes.length < 2) {
+      pauseAvg.textContent = `PauseAvg: 0 ms`;
     return 0;
   }
   let sum = 0;
@@ -116,12 +123,12 @@ function calculateAveragePause(keystrokes) {
     sum += keystrokes[i].time - keystrokes[i - 1].time;
   }
   pauseAvgVal = Math.round(sum / (keystrokes.length - 1));
-  pauseAvg.textContent = `PauseAvg: ${pauseAvgVal}`;
+  pauseAvg.textContent = `PauseAvg: ${pauseAvgVal} ms`;
   return pauseAvgVal;
 }
 
 function updateStats() {
-  let typeValue = typingArea.value;
+let typeValue = typingArea.value.replace(/\s+/g, " ");
 
   let totalDuration = getDurationSeconds();
   calculateWPM(typeValue, totalDuration);
