@@ -56,8 +56,7 @@ resetBtn.addEventListener("click", () => {
   errors.textContent = `Error: 0`;
   backspaces.textContent = `Backspaces: 0`;
   pauseAvg.textContent = `PauseAvg: 0`;
-    typingArea.value = "";
-
+  typingArea.value = "";
 });
 
 function getDurationSeconds() {

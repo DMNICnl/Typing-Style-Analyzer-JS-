@@ -24,16 +24,16 @@ body {
   display: flex;
   align-items: center;
 }
-h1{
-    font-size: 40px;
-    padding: 30px;
+h1 {
+  font-size: 40px;
+  padding: 30px;
 }
 .buttons button {
   padding: 15px;
   font-size: 20px;
   border-radius: 30px;
   font-family: "Courier New", Courier, monospace;
-    margin: 30px 10px 0px 0px;
+  margin: 30px 10px 0px 0px;
   border: none;
   background-color: #00033d;
   color: aliceblue;
@@ -41,8 +41,8 @@ h1{
 }
 
 @media screen and (max-width: 767px) {
-    .wrapper{
-        transform: translateY(-200px);
-        flex-direction: column-reverse;
-    }
+  .wrapper {
+    transform: translateY(-200px);
+    flex-direction: column-reverse;
+  }
 }
